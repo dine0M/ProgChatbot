@@ -105,7 +105,7 @@ namespace Chatbot
 
                 if (userInput.Contains("how are you"))
                 {
-                    Console.WriteLine("I'm a robot; I don't have feelings.");
+                    Console.WriteLine("I'm a robot; I don't have feelings."); 
                 }
                 else if (userInput.Contains("purpose"))
                 {
