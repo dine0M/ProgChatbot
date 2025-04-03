@@ -53,7 +53,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Name: Shieldify.sln
+      Solution_Name: ProgChatbot.sln
 
     steps:
     - name: Checkout
