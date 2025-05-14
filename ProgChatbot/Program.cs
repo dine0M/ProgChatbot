@@ -13,7 +13,7 @@ class CyberSecurityBot
     static string userInterest = null;
 
     // Keyword-based tips (optimized using dictionary and lists)
-    static Dictionary<string, List<string>> cybersecurityTips = new Dictionary<string, List<string>>()
+    static Dictionary<string, List<string>> cybersecurityTips = new Dictionary<string, List<string>>() 
     {
         {"password", new List<string> {
             "Use strong, unique passwords for each account. Avoid using personal details.",
