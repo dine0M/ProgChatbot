@@ -26,7 +26,7 @@ class CyberSecurityBot
             "Be cautious of deals that seem too good to be true—they often are."
         }},
         {"privacy", new List<string> {
-            "Review privacy settings on your social media and email accounts.",
+            "Review privacy settings on your social media and email accounts.", 
             "Limit what personal information you share online.",
             "Use encrypted communication tools whenever possible."
         }},
@@ -101,7 +101,7 @@ class CyberSecurityBot
     }
 
     // Handle keyword recognition and responses
-    static string HandleKeyword(string input)
+    static string HandleKeyword(string input) 
     {
         foreach (var entry in cybersecurityTips)
         {
