@@ -90,7 +90,7 @@ class CyberSecurityBot
     }
 
     // Detect sentiment in user input
-    static string DetectSentiment(string input)
+    static string DetectSentiment(string input) 
     {
         foreach (var sentiment in sentimentResponses)
         {
