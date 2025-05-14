@@ -48,7 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Github\workflows\main.yml" />
+    <None Include="Github\workflows\dotnet-desktop.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.TXT" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

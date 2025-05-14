@@ -6,35 +6,67 @@ using System.Threading.Tasks;
 using System.Media;
 using System.Diagnostics;
 
-
-
-
-namespace Chatbot
+class CyberSecurityBot
 {
-    internal class Program
+    // Memory to store user info
+    static string userName = null;
+    static string userInterest = null;
+
+    // Keyword-based tips (optimized using dictionary and lists)
+    static Dictionary<string, List<string>> cybersecurityTips = new Dictionary<string, List<string>>()
     {
+        {"password", new List<string> {
+            "Use strong, unique passwords for each account. Avoid using personal details.",
+            "Consider using a password manager to store your passwords safely.",
+            "Change your passwords regularly and never share them."
+        }},
+        {"scam", new List<string> {
+            "Never click on suspicious links or attachments in emails.",
+            "Verify the identity of anyone asking for your personal information.",
+            "Be cautious of deals that seem too good to be true—they often are."
+        }},
+        {"privacy", new List<string> {
+            "Review privacy settings on your social media and email accounts.",
+            "Limit what personal information you share online.",
+            "Use encrypted communication tools whenever possible."
+        }},
+        {"phishing", new List<string> {
+            "Be cautious of emails asking for personal information.",
+            "Don’t click on links from unknown senders.",
+            "Check for poor grammar or suspicious links in emails.",
+            "Go directly to websites rather than clicking on email links."
+        }}
+    };
 
-        static void Main(string[] args)
+    // Sentiment map
+    static Dictionary<string, string> sentimentResponses = new Dictionary<string, string>() 
+    {
+        {"worried", "It's completely understandable to feel that way. Let me help ease your concerns."},
+        {"frustrated", "I get that this can be frustrating. You're not alone—many face the same issue."},
+        {"curious", "Curiosity is great! Let's explore more about this topic together."}
+    };
+
+    // Voice greeting method
+    static void VoiceGreeting()
+    {
+        try
         {
-
-            VoiceGreeting();
-            ImageDisplay();
-            StartChat();
-            UserInteraction();
+            var myPlayer = new SoundPlayer();
+            myPlayer.SoundLocation = @"C:\Users\dineo\source\repos\Chatbot\Chatbot\PROG2A.wav.wav"; // <-- Make sure this path is correct and file exists
+            myPlayer.Load();  // Load sound to catch any file errors early
+            myPlayer.Play();  // Play audio
         }
-        //voice greeting method
-        static void VoiceGreeting()
+        catch (Exception ex)
         {
-            var myPlayer = new System.Media.SoundPlayer();
-            myPlayer.SoundLocation = @"C:\Users\dineo\source\repos\Chatbot\Chatbot\PROG2A.wav.wav";
-            myPlayer.Play();
-
+            Console.WriteLine("CyberSecurityBot: Audio could not be played. " + ex.Message);
         }
-        //ASCII art text dislpay
-        static void ImageDisplay()
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            string tittle = @"  /$$$$$$  /$$     /$$ /$$$$$$$  /$$$$$$$$ /$$$$$$$  /$$   /$$ /$$$$$$$$ /$$$$$$$$
+    }
+
+    // ASCII welcome method
+    static void DisplayWelcomeAscii()
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        string tittle = @"  /$$$$$$  /$$     /$$ /$$$$$$$  /$$$$$$$$ /$$$$$$$  /$$   /$$ /$$$$$$$$ /$$$$$$$$
  /$$__  $$|  $$   /$$/| $$__  $$| $$_____/| $$__  $$| $$$ | $$| $$_____/|__  $$__/
 | $$  \__/ \  $$ /$$/ | $$  \ $$| $$      | $$  \ $$| $$$$| $$| $$         | $$   
 | $$        \  $$$$/  | $$$$$$$ | $$$$$   | $$$$$$$/| $$ $$ $$| $$$$$      | $$   
@@ -54,92 +86,110 @@ namespace Chatbot
 |  $$$$$$/| $$$$$$$$|  $$$$$$/|  $$$$$$/| $$  | $$ /$$$$$$   | $$       | $$      
  \______/ |________/ \______/  \______/ |__/  |__/|______/   |__/       |__/      
  ";
-            Console.WriteLine(tittle);
+        Console.WriteLine(tittle);
+    }
 
-        }
-
-        static string StartChat()
+    // Detect sentiment in user input
+    static string DetectSentiment(string input)
+    {
+        foreach (var sentiment in sentimentResponses)
         {
-            while (true)
+            if (input.ToLower().Contains(sentiment.Key))
+                return sentiment.Value;
+        }
+        return null;
+    }
+
+    // Handle keyword recognition and responses
+    static string HandleKeyword(string input)
+    {
+        foreach (var entry in cybersecurityTips)
+        {
+            if (input.ToLower().Contains(entry.Key))
             {
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.Write("\nWhat is your name :)?");
-                string name = Console.ReadLine();
+                var tip = GetRandomTip(entry.Value);
 
-
-                if (!string.IsNullOrEmpty(name))
+                if (userInterest != null && userInterest.ToLower().Contains(entry.Key))
                 {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("Welcome " + name);
-                    Console.ResetColor();
-                    return name;
+                    return $"As someone interested in {entry.Key}, here's a tip: {tip}";
                 }
 
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("I didnt quite understand that,Could you rephrase ");
-                Console.ResetColor();
+                return tip;
             }
         }
 
-        static void UserInteraction()
+        return null;
+    }
+
+    // Random tip selection
+    static string GetRandomTip(List<string> tips)
+    {
+        Random rand = new Random();
+        int index = rand.Next(tips.Count);
+        return tips[index];
+    }
+
+    // Main chatbot logic
+    static void Chat()
+    {
+        VoiceGreeting(); // Play audio first
+        DisplayWelcomeAscii(); // Then display ASCII
+
+        Console.WriteLine("CyberSecurityBot: Hi! Ask me anything about cybersecurity.");
+
+        while (true)
         {
-            while (true) // Keep chatbot running until user exits
+            Console.Write("\nYou: ");
+            string input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input))
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write("\nAsk me questions: ");
-                string userInput = Console.ReadLine().ToLower();
-                Console.ResetColor();
-
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Type exit to leave this page");
-                if (userInput == "exit")
-
-                {
-                    Console.WriteLine("\nGoodbye! Stay safe online. 😊");
-                    Environment.Exit(0); 
-
-
-                }
-
-                // Check if the question matches known questions
-
-                if (userInput.Contains("how are you"))
-                {
-                    Console.WriteLine("I'm a robot; I don't have feelings."); 
-                }
-                else if (userInput.Contains("purpose"))
-                {
-                    Console.WriteLine("I'm here to help you stay safe online.");
-                }
-                else if (userInput.Contains("what are basic things you can help me with"))
-                {
-                    Console.WriteLine("I can help with password safety, phishing, and safe browsing.");
-                }
-                else if (userInput.Contains("phishing"))
-                {
-                    Console.WriteLine("Phishing is the practice of sending fraudulent communications that appear to come from a legitimate and reputable source,usually through email and test messaging");
-                }
-                else if (userInput.Contains("password safety"))
-                {
-                    Console.WriteLine("Create strong, unique passwords for each account and use a password manager.");
-                }
-                else if (userInput.Contains("safe browsing"))
-                {
-                    Console.WriteLine("Safe browsing is practices that help protect you online by being cautious about the websites you visit, checking for secure connections (like \"HTTPS\"), avoiding suspicious links, keeping your software updated, and managing your privacy settings to minimize the information you share online.");
-                }
-
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("I'm not sure about that. Try asking something related to cybersecurity.");
-                    Console.ResetColor();
-
-                }
-                //Console.ForegroundColor = ConsoleColor.Yellow;
-                // Console.WriteLine("\nYou can ask me another question or type 'exit' to leave.");
-                //Console.ResetColor();
-
+                Console.WriteLine("CyberSecurityBot: Please enter something.");
+                continue;
             }
+
+            if (input.ToLower() == "exit" || input.ToLower() == "quit")
+            {
+                Console.WriteLine("CyberSecurityBot: Stay safe online. Goodbye!");
+                break;
+            }
+
+            if (input.ToLower().StartsWith("my name is"))
+            {
+                userName = input.Substring(10).Trim();
+                Console.WriteLine($"CyberSecurityBot: Nice to meet you, {userName}!");
+                continue;
+            }
+
+            if (input.ToLower().Contains("i'm interested in"))
+            {
+                int index = input.ToLower().IndexOf("i'm interested in") + "i'm interested in".Length;
+                userInterest = input.Substring(index).Trim();
+                Console.WriteLine($"CyberSecurityBot: Great! I’ll remember that you're interested in {userInterest}.");
+                continue;
+            }
+
+            string sentimentResponse = DetectSentiment(input);
+            if (sentimentResponse != null)
+            {
+                Console.WriteLine("CyberSecurityBot: " + sentimentResponse);
+                continue;
+            }
+
+            string response = HandleKeyword(input);
+            if (response != null)
+            {
+                Console.WriteLine("CyberSecurityBot: " + response);
+                continue;
+            }
+
+            Console.WriteLine("CyberSecurityBot: I'm not sure I understand. Can you try rephrasing?");
         }
     }
+
+    static void Main(string[] args)
+    {
+        Chat();
+    }
 }
+
