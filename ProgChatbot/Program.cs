@@ -101,7 +101,7 @@ class CyberSecurityBot
     }
 
     // Handle keyword recognition and responses
-    static string HandleKeyword(string input) 
+    static string HandleKeyword(string input)  
     {
         foreach (var entry in cybersecurityTips)
         {
