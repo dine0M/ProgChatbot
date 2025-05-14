@@ -122,7 +122,7 @@ class CyberSecurityBot
     }
 
     // Random tip selection
-    static string GetRandomTip(List<string> tips) 
+    static string GetRandomTip(List<string> tips)
     {
         Random rand = new Random();
         int index = rand.Next(tips.Count);
